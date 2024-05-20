@@ -27,4 +27,4 @@ class Player():
         print(f"Player {self.name} currently has a total score of {self._score}!")
     
     def printTurnInfo(self):
-        print(f"You currently have {self._turnpoints} turn points, and a total score of {self._score}!")
+        print(f"You currently have {self._turnpoints} points this turn, and a total score of {self._score}!")
