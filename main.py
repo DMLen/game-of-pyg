@@ -89,12 +89,13 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
 
         else: #strategy == 3 by neccessity
             scoreDiff = abs(referenceScore - otherPlayerScore)
-            holdValue = 21 + (scoreDiff/8) 
-            print(f"[DEBUG] For this turn, holding at {holdValue}!")
+            holdValue = 21 + (scoreDiff/8)
+            threshold = 0.71*scoreToWin #in a standard game to 100, this will be 71 as described by the algorithm. this just exists so the algorithm wont act strangely if we're not playing to 100. 
+            print(f"[DEBUG] scoreDiff = {scoreDiff}, for this turn, holding at {holdValue}! Begin to race at {threshold}!")
             if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold early if they have enough points to win.
                 bankScore(player)
                 return
-            if (referenceScore >= 71) or (otherPlayerScore >= 71): #check if either player has at least 71, and then keep rolling until first cond satisfied 
+            if (referenceScore >= threshold) or (otherPlayerScore >= threshold): #check if either player has at least 71, and then keep rolling until first cond satisfied 
                 print("[DEBUG] Threshold reached! Rolling to win!")
                 pass #continue to roll
             elif referenceTurnPoints >= holdValue: #if the current turnpoints is at least the holdvalue, end the turn
@@ -104,6 +105,8 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
 
 
         #if we are here, no algorithm has decided to cancel the turn. proceed as normal
+        print(f"{player} has decided to roll the dice!")
+        time.sleep(2)
         roll = rolldice()
         rollNumber += 1
 
@@ -158,11 +161,11 @@ score1 = player1.getScore()
 score2 = player2.getScore()
 
 if score1 > score2:
-    print(f"{player1} wins! They win with a score of {score1}!")
+    print(f"\n{player1} wins! They win with a score of {score1}!")
 elif score1 < score2:
-    print(f"{player2} wins! They win with a score of {score2}!")
+    print(f"\n{player2} wins! They win with a score of {score2}!")
 else:
-    print("Draw! You have a very small chance of seeing this message!")
+    print("\nDraw! You have a very small chance of seeing this message!")
 
 print(f"{player1}'s score was {score1} - {player2}'s score was {score2}")
 
