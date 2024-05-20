@@ -1,5 +1,6 @@
 from player import Player
 import random
+import time
 
 random.seed() #invoking method this way sets dice rng to current system time!
 
@@ -38,10 +39,42 @@ def doTurn(player): #Turn function for human player. asks for input, etc.
             print("Invalid input!")
 
 
-def doTurnCPU(player, difficulty): #Automated turn function for cpu player. contains bundled decision-making logic
+def doTurnCPU(player, strategy, otherplayer, scoretowin): #Automated turn function for cpu player. contains bundled strategy logic
+
+    """
+    Values and Definitions of strategies:
+    1 = Easy Mode :: A roll strategy. Will randomly decide when to end turn with no heuristic consideration. Has a 1/4 chance to end the turn after each roll.
+    2 = Medium Mode :: Also known as "Hold at 20". CPU will roll until turn points are at least 20, and then hold.
+    3 = Hard Mode :: "End race or Keep pace". From wikipedia: If either player has a score of 71 or higher, roll to win. Otherwise, hold on 21 plus the difference between scores divided by 8. This has a 0.9% disadvantage against optimal play.
+    """
     print(f"{player}, it is now your turn!")
     player.printTurnInfo()
+    isTurn = 1
+    rollNumber = 0
+    while isTurn: #beginning of turn
 
+        #instantiate relevant variables of the game state
+        referenceTurnPoints = player.getTurnPoints()
+        referenceScore = player.getScore()
+        otherPlayerScore = otherplayer.getScore() #the other player's score is only considered if we're running strategy #4
+
+        #the suitable algorithm will run to determine whether the current turn should be ended. this decision will be made at the beginning of each turn.
+        if strategy == "1":
+            chance = random.randint(1, 4)
+            print(f"Internal decisionmaking RNG is {chance}")
+            if (chance == 1 and rollNumber != 0): #second cond prevents ai from holding on the first roll of their turn
+                #bank cpu score
+                isTurn = 0
+            else:
+                #do roll
+
+        elif strategy == "2":
+            #unimplemented
+            print("placeholder 2")
+
+        else: #strategy == 3 by neccessity
+            #unimplemented
+            print("placeholder 3")
 
 print("Game of Pyg!\n")
 
@@ -53,10 +86,10 @@ while gamemode not in ["a", "b",]: #handler for invalid input
 player1name = input("Enter player 1 name: ")
 
 if gamemode == "a":
-    difficulty = 0
-    while difficulty not in ["1", "2"]:
-        print("CPU difficulty: \n1. Dumb \n2. Optimal")
-        difficulty = input("[1/2]: ")
+    strategy = 0
+    while strategy not in ["1", "2", "3"]:
+        print("CPU strategy: \n1. Easy \n2. Medium \n3. Hard")
+        strategy = input("[1/2/3]: ") #strategy value is later passed to the cpu when doing turns
 else:
     player2name = input("Enter player 2 name: ")
 
@@ -75,7 +108,7 @@ while max(player1.getScore(), player2.getScore()) < scoretowin:
     doTurn(player1)
 
     if gamemode == "a":
-        doTurnCPU(player2, difficulty)
+        doTurnCPU(player2, strategy, player1, scoretowin)
     else:
         doTurn(player2)
 
