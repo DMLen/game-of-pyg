@@ -16,3 +16,6 @@ class Player():
     def bankTurnPoints(self):
         self._score += self._turntotal
         self.clearTurnTotal()
+
+    def getScore(self):
+        return self._score
