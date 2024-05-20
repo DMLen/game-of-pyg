@@ -1,10 +1,10 @@
 # game-of-pyg
 *Pronounced "Game of Pig"*
 
-A command-line Python implementation of the dice game Pig, also known as Greedy Pig. ( https://en.wikipedia.org/wiki/Pig_(dice_game) )
-Inspired after seeing the video by the wonderful youtube channel Numberphile ( https://www.youtube.com/watch?v=ULhRLGzoXQ0 )
+A command-line Python implementation of the dice game Pig, also known as Greedy Pig as described on [Wikipedia](https://en.wikipedia.org/wiki/Pig_(dice_game)). 
+Inspired after seeing the [video on the topic](https://www.youtube.com/watch?v=ULhRLGzoXQ0) by the wonderful youtube channel Numberphile.
 
-##Basic Rules:
+## Basic Rules
 *From Wikipedia*
 
 Each turn, a player repeatedly rolls a die until either a 1 is rolled or the player decides to "hold":
@@ -14,7 +14,7 @@ Each turn, a player repeatedly rolls a die until either a 1 is rolled or the pla
 
 The first player to score 100 or more points wins. 
 
-##Supports play against CPU!
+## Supports play against CPU!
 The difficulty of the CPU player can be selected at game start.
 The CPU will use three different strategy algorithms depending on the desired setting.
 1. "Easy" == The CPU will randomly decide when to end its turn. By default, it has a 1/4 chance to end the turn.
