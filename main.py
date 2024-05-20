@@ -43,7 +43,7 @@ def doTurn(player): #Turn function for human player. asks for input, etc.
 def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn function for cpu player. contains bundled strategy logic
     """
     Values and Definitions of strategies:
-    1 = Easy Mode :: A roll strategy. Will randomly decide when to end turn with no heuristic consideration. Has a 1/4 chance to end the turn after each roll.
+    1 = Easy Mode :: A roll strategy. Will randomly decide when to end turn with no heuristic consideration. Has a 1/6 chance to end the turn after each roll.
     2 = Medium Mode :: Also known as "Hold at 20". CPU will roll until turn points are at least 20, and then hold.
     3 = Hard Mode :: "End race or Keep pace". From wikipedia: If either player has a score of 71 or higher, roll to win. Otherwise, hold on 21 plus the difference between scores divided by 8. This has a 0.9% disadvantage against optimal play.
     """
@@ -61,23 +61,27 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
     while isTurn: #beginning of turn
 
         #instantiate relevant variables of the game state
-        referenceTurnPoints = player.getTurnPoints()
-        referenceScore = player.getScore()
-        otherPlayerScore = otherplayer.getScore() #the other player's score is only considered if we're running strategy #4
+        referenceTurnPoints = player.getTurnPoints() #player's current points for this turn
+        referenceScore = player.getScore() #player's running score
+        otherPlayerScore = otherplayer.getScore() #the other player's score is only considered if we're running strategy #3
 
         #the suitable algorithm will run to determine whether to continue with the turn. this decision will be made at the beginning of each turn.
+
         if strategy == "1":
-            chance = random.randint(1, 4)
-            print(f"[DEBUG] Internal decisionmaking RNG is {chance}")
-            if (chance == 1) and (rollNumber != 0): #second cond prevents ai from holding on the first roll of their turn
+            if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold if they have enough points to win to prevent potentially unwinnable scenario (if the score is 99 the ai cannot win!)
                 bankScore(player)
                 return
-            else:
-                pass #do roll
-
+            chance = random.randint(1, 6)
+            print(f"[DEBUG] Strategy #1 internal decisionmaking RNG is {chance}")
+            if (chance == 1) and (rollNumber != 0): #second cond prevents ai from holding on the first roll of their turn.
+                bankScore(player)
+                return
+            
         elif strategy == "2":
-            #unimplemented
-            print("placeholder 2")
+            if referenceTurnPoints >= 20:
+                bankScore(player)
+                return
+
 
         else: #strategy == 3 by neccessity
             #unimplemented
@@ -134,11 +138,17 @@ while max(player1.getScore(), player2.getScore()) < scoreToWin:
     else:
         doTurn(player2)
 
-if player1.getScore() > player2.getScore():
-    print(f"{player1} wins! They win with a score of " + str(player1.getScore()) + "!" )
-elif player1.getScore() < player2.getScore():
-    print(f"{player2} wins! They win with a score of " + str(player2.getScore()) + "!" )
-else:
-    print("Draw! Both players have a score of " + str(player2.getScore()) + "! You both lose!")
+score1 = player1.getScore()
+score2 = player2.getScore()
 
+if score1 > score2:
+    print(f"{player1} wins! They win with a score of {score1}!")
+elif score1 < score2:
+    print(f"{player2} wins! They win with a score of {score2}!")
+else:
+    print("Draw! You have a very small chance of seeing this message!")
+
+print(f"{player1}'s score was {score1} - {player2}'s score was {score2}")
+
+          
 
