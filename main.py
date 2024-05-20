@@ -83,7 +83,7 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
                 bankScore(player)
                 return
             chance = random.randint(1, 5)
-            print(f"[DEBUG] Strategy #1 internal decisionmaking RNG is {chance}")
+            #print(f"[DEBUG] Strategy #1 internal decisionmaking RNG is {chance}")
             if (chance == 1) and (rollNumber != 0): #second cond prevents ai from holding on the first roll of their turn.
                 bankScore(player)
                 return
@@ -93,7 +93,7 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
                 bankScore(player)
                 return
             if referenceTurnPoints >= 20:
-                print("[DEBUG] Threshold reached!")
+                #print("[DEBUG] Threshold reached!")
                 bankScore(player)
                 return
 
@@ -102,15 +102,15 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
             scoreDiff = abs(referenceScore - otherPlayerScore)
             holdValue = 21 + (scoreDiff/8)
             threshold = 0.71*scoreToWin #in a standard game to 100, this will be 71 as described by the algorithm. this just exists so the algorithm wont act strangely if we're not playing to 100. 
-            print(f"[DEBUG] scoreDiff = {scoreDiff}, for this turn, holding at {holdValue}! Begin to race at {threshold}!")
+            #print(f"[DEBUG] scoreDiff = {scoreDiff}, for this turn, holding at {holdValue}! Begin to race at {threshold}!")
             if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold early if they have enough points to win.
                 bankScore(player)
                 return
             if (referenceScore >= threshold) or (otherPlayerScore >= threshold): #check if either player has at least 71, and then keep rolling until first cond satisfied 
-                print("[DEBUG] Threshold reached! Rolling to win!")
+                #print("[DEBUG] Threshold reached! Rolling to win!")
                 pass #continue to roll
             elif referenceTurnPoints >= holdValue: #if the current turnpoints is at least the holdvalue, end the turn
-                print("[DEBUG] holdValue reached! Let's end while we can!")
+                #print("[DEBUG] holdValue reached! Let's end while we can!")
                 bankScore(player)
                 return
 
