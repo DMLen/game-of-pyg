@@ -1,14 +1,25 @@
 from player import Player
 import random
 import time
+from bcolors import bcolors
 
 random.seed() #invoking method this way sets dice rng to current system time!
 
 def rolldice():
     return random.randint(1, 6)
 
+def printRollFail(player, referenceTurnPoints):
+    print(bcolors.FAIL + f"{player} has rolled a 1! They lose their {referenceTurnPoints} points, and their turn ends!" + bcolors.ENDC)
+
+def printRollSuccess(player, referenceTurnPoints, roll):
+    print(f"{player} has rolled a " + bcolors.WARNING + f"{roll}" + bcolors.ENDC + "! They now have " + bcolors.WARNING + f"{referenceTurnPoints}" + bcolors.ENDC + " points for this turn!")
+
+def printEndTurn(player, referenceTurnPoints, referenceScore):
+    print(f"{player} has chosen to end their turn with " + bcolors.WARNING + f"{referenceTurnPoints}" + bcolors.ENDC + " points! They now have a new total score of " + bcolors.WARNING + f"{referenceScore}" + bcolors.ENDC + "!")
+
+
 def doTurn(player): #Turn function for human player. asks for input, etc.
-    print(f"\n{player}, it is now your turn!\nRemember, rolling a 1 will end your turn and you do not get to keep your points!")
+    print(bcolors.OKCYAN + f"\n{player}, it is now your turn!\nRemember, rolling a 1 will end your turn and you do not get to keep your points!" + bcolors.ENDC)
     player.printTurnInfo()
     isTurn = 1
     while isTurn:
@@ -17,23 +28,23 @@ def doTurn(player): #Turn function for human player. asks for input, etc.
         print("Would you like to: \nr. Roll the dice\nh. Hold (end turn and save points)")
         action = input("[r/h]: ")
         if action == "r":
-            input("Press ENTER to roll the dice!!!")
+            input(bcolors.BOLD + "Press ENTER to roll the dice!!!" + bcolors.ENDC)
             time.sleep(1)
             roll = rolldice()
             if roll == 1:
-                print(f"{player} has rolled a 1! They lose their {referenceTurnPoints} points, and their turn ends!")
+                printRollFail(player, referenceTurnPoints)
                 player.clearTurnPoints()
                 isTurn = 0
             else:
                 player.addTurnPoints(roll)
                 referenceTurnPoints = player.getTurnPoints() #update variable for fstring
-                print(f"{player} has rolled a {roll}! They now have {referenceTurnPoints} points for this turn!")
+                printRollSuccess(player, referenceTurnPoints, roll)
 
 
         elif action == "h":
             player.bankTurnPoints()
             referenceScore = player.getScore()
-            print(f"{player} has chosen to end their turn with {referenceTurnPoints} points! They now have a new total score of {referenceScore}!")
+            printEndTurn(player, referenceTurnPoints, referenceScore)
             isTurn = 0
 
         else:
@@ -51,10 +62,10 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
     def bankScore(player):
         player.bankTurnPoints()
         referenceScore = player.getScore()
-        print(f"{player} has chosen to end their turn with {referenceTurnPoints} points! They now have a new total score of {referenceScore}!")
+        printEndTurn(player, referenceTurnPoints, referenceScore)
 
 
-    print(f"\n{player}, it is now your turn!")
+    print(bcolors.OKCYAN + f"\n{player}, it is now your turn!" + bcolors.ENDC)
     player.printTurnInfo()
     isTurn = 1
     rollNumber = 0
@@ -111,17 +122,25 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
         rollNumber += 1
 
         if roll == 1:
-            print(f"{player} has rolled a 1! They lose their {referenceTurnPoints} points, and their turn ends!")
+            printRollFail(player, referenceTurnPoints)
             player.clearTurnPoints()
             isTurn = 0
         else:
             player.addTurnPoints(roll)
             referenceTurnPoints = player.getTurnPoints() #update variable for fstring
-            print(f"{player} has rolled a {roll}! They now have {referenceTurnPoints} points for this turn!")
+            printRollSuccess(player, referenceTurnPoints, roll)
 
         
 
-print("Game of Pyg!\n")
+print("""\
+ ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ███████╗    ██████╗ ██╗   ██╗ ██████╗ 
+██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██╔════╝    ██╔══██╗╚██╗ ██╔╝██╔════╝ 
+██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║█████╗      ██████╔╝ ╚████╔╝ ██║  ███╗
+██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║██╔══╝      ██╔═══╝   ╚██╔╝  ██║   ██║
+╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝██║         ██║        ██║   ╚██████╔╝
+ ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝ ╚═╝         ╚═╝        ╚═╝    ╚═════╝ 
+                                                                                       
+""")
 
 print("Available gamemodes: \na. Player vs CPU\nb. Player vs Player")
 gamemode = ""
@@ -161,9 +180,9 @@ score1 = player1.getScore()
 score2 = player2.getScore()
 
 if score1 > score2:
-    print(f"\n{player1} wins! They win with a score of {score1}!")
+    print(bcolors.WARNING + f"\n{player1} wins! They win with a score of {score1}!" + bcolors.ENDC)
 elif score1 < score2:
-    print(f"\n{player2} wins! They win with a score of {score2}!")
+    print(bcolors.WARNING + f"\n{player2} wins! They win with a score of {score2}!" + bcolors.ENDC)
 else:
     print("\nDraw! You have a very small chance of seeing this message!")
 
