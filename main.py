@@ -78,14 +78,30 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
                 return
             
         elif strategy == "2":
+            if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold if they have enough points to win.
+                bankScore(player)
+                return
             if referenceTurnPoints >= 20:
+                print("[DEBUG] Threshold reached!")
                 bankScore(player)
                 return
 
 
         else: #strategy == 3 by neccessity
-            #unimplemented
-            print("placeholder 3")
+            scoreDiff = abs(referenceScore - otherPlayerScore)
+            holdValue = 21 + (scoreDiff/8) 
+            print(f"[DEBUG] For this turn, holding at {holdValue}!")
+            if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold early if they have enough points to win.
+                bankScore(player)
+                return
+            if (referenceScore >= 71) or (otherPlayerScore >= 71): #check if either player has at least 71, and then keep rolling until first cond satisfied 
+                print("[DEBUG] Threshold reached! Rolling to win!")
+                pass #continue to roll
+            elif referenceTurnPoints >= holdValue: #if the current turnpoints is at least the holdvalue, end the turn
+                print("[DEBUG] holdValue reached! Let's end while we can!")
+                bankScore(player)
+                return
+
 
         #if we are here, no algorithm has decided to cancel the turn. proceed as normal
         roll = rolldice()
