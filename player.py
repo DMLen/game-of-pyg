@@ -1,3 +1,5 @@
+from bcolors import bcolors
+
 class Player():
     def __init__(self, name):
         self.name = name
@@ -27,4 +29,4 @@ class Player():
         print(f"Player {self.name} currently has a total score of {self._score}!")
     
     def printTurnInfo(self):
-        print(f"You currently have {self._turnpoints} points this turn, and a total score of {self._score}!")
+        print(f"You currently have {self._turnpoints} points this turn, and a total score of " + bcolors.WARNING + f"{self._score}" + bcolors.ENDC + "!")
