@@ -71,7 +71,7 @@ def doTurnCPU(player, strategy, otherplayer, scoreToWin): #Automated turn functi
             if (scoreToWin - referenceScore) < referenceTurnPoints: #force ai to hold if they have enough points to win to prevent potentially unwinnable scenario (if the score is 99 the ai cannot win!)
                 bankScore(player)
                 return
-            chance = random.randint(1, 6)
+            chance = random.randint(1, 5)
             print(f"[DEBUG] Strategy #1 internal decisionmaking RNG is {chance}")
             if (chance == 1) and (rollNumber != 0): #second cond prevents ai from holding on the first roll of their turn.
                 bankScore(player)
