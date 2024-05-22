@@ -158,7 +158,9 @@ if gamemode == "a":
 else:
     player2name = input("Enter player 2 name: ")
 
-scoreToWin = int( input("\nInput score to win [recommended 100]: ") )
+scoreToWin = input("\nInput score to win [recommended 100]: ")
+if (not scoreToWin) or (not scoreToWin.isnumeric()):
+    scoreToWin = 100
 
 #begin game
 #instantiate player objects
